@@ -155,7 +155,7 @@ public class WeatherActivity extends AppCompatActivity {
      */
     public void requestWeather(final String weatherId) {
         String weatherUrl = "http://guolin.tech/api/weather?cityid=" + weatherId +
-                "&key=b0993c8c443641b4aecaf5612abe667d";
+                "&key=bc0418b57b2d4918819d3974ac1285d9";
         HttpUtil.sendOkHttpRequest(weatherUrl, new Callback() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
@@ -232,27 +232,11 @@ public class WeatherActivity extends AppCompatActivity {
         String degree = weather.now.temperature + "℃";
         String weatherInfo = weather.now.more.info;
         titleCity.setText(cityName);
-        titleUpdateTime.setText(updateTime);
+        titleUpdateTime.setText("最后更新时间:"+updateTime);
         degreeText.setText(degree);
         weatherInfoText.setText(weatherInfo);
         forecastLayout.removeAllViews();
-        Intent intentinfor = new Intent(this, WeatherActivity.class);
-        PendingIntent pi = PendingIntent.getActivity(this, 0, intentinfor, 0);
-        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        Notification notification = new NotificationCompat.Builder(this)
-                .setContentTitle("MyWeather天气信息")
-                .setContentText(cityName + "        " + degree + "         " + weatherInfo)
-                .setStyle(new NotificationCompat.BigTextStyle().bigText(cityName + "        " +
-                        degree
-                        + "         " + weatherInfo + "\n" + comfortText + "\n" + carWashText +
-                        "\n" + sportText))
-                .setWhen(System.currentTimeMillis())
-                .setSmallIcon(R.mipmap.ic_my_small_launcher)
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_my_launcher))
-                .setContentIntent(pi)
-                .setAutoCancel(true)
-                .build();
-        manager.notify(1, notification);
+
         for (Forecast forecast : weather.forecastList) {
             View view = LayoutInflater.from(this).inflate(R.layout.forecast_item, forecastLayout,
                     false);
@@ -266,7 +250,7 @@ public class WeatherActivity extends AppCompatActivity {
 
             if (forecast.more.info.equals("晴")) {
                 weathericon.setImageDrawable(getResources().getDrawable(R.drawable.ic_sun));
-            } else if (forecast.more.info.equals("多云")) {
+            } else if (forecast.more.info.equals("多云")|| forecast.more.info.equals("晴间多云")) {
                 weathericon.setImageDrawable(getResources().getDrawable(R.drawable.ic_sun_cloud));
             } else if (forecast.more.info.equals("阴")) {
                 weathericon.setImageDrawable(getResources().getDrawable(R.drawable.ic_cloud));
@@ -310,6 +294,23 @@ public class WeatherActivity extends AppCompatActivity {
         weatherLayout.setVisibility(View.VISIBLE);
         Intent intent = new Intent(this, AutoUpdateService.class);
         startService(intent);
+
+        Intent intentinfor = new Intent(this, WeatherActivity.class);
+        PendingIntent pi = PendingIntent.getActivity(this, 0, intentinfor, 0);
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        Notification notification = new NotificationCompat.Builder(this)
+                .setContentTitle("Weather天气信息")
+                .setContentText(cityName + "        " + degree + "         " + weatherInfo)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(cityName + "        " +
+                        degree + "         " + weatherInfo + "\n" + comfort + "\n" + carWash +
+                        "\n" + sport))
+                .setWhen(System.currentTimeMillis())
+                .setSmallIcon(R.mipmap.ic_my_small_launcher)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_my_launcher))
+                .setContentIntent(pi)
+                .setAutoCancel(true)
+                .build();
+        manager.notify(1, notification);
 
     }
 

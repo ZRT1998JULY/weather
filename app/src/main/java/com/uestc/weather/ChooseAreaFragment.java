@@ -135,12 +135,11 @@ public class ChooseAreaFragment extends Fragment {
             }
         });
         queryProvinces();
-        localButton.setOnClickListener((v) -> {
+        localButton.setOnClickListener((View v) -> {
             if (getActivity() instanceof MainActivity) {
                 MainActivity activity = (MainActivity) getActivity();
                 location = activity.getLocation();
                 findCounty(location);
-                weatherId = findWeatherId();
                 Log.e("tag", location + "//" + weatherId);
                 Intent intent = new Intent(MyApplication.getContext(), WeatherActivity.class);
                 intent.putExtra("weather_id", weatherId);
@@ -166,11 +165,19 @@ public class ChooseAreaFragment extends Fragment {
         HttpUtil.sendOkHttpRequest(address, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        closeProgressDialog();
+                        Toast.makeText(getContext(),"failed to get city",Toast.LENGTH_SHORT).show();
+                    }
+                });
                 e.printStackTrace();
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                showProgressDialog();
                 final String locationText = response.body().string();
                 refresh = false;
                 Log.e("findCounty", locationText);

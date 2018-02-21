@@ -2,14 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff"
+    android:background="#9cffffff"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary">
+        android:background="#770019fa">
 
         <TextView
             android:id="@+id/title_text"
@@ -28,11 +28,23 @@
             android:layout_marginLeft="10dp"
             android:background="@drawable/ic_back" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#fff"
+            android:textSize="15sp"
+            android:text="当前位置"
+            android:layout_alignBaseline="@+id/local_button"
+            android:layout_alignBottom="@+id/local_button"
+            android:layout_toLeftOf="@+id/local_button"
+            android:layout_toStartOf="@+id/local_button" />
+
         <Button
             android:id="@+id/local_button"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_alignParentRight="true"
+            android:background="@drawable/ic_my_location"
             android:layout_centerVertical="true"
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"/>
