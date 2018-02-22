@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
@@ -62,6 +63,9 @@ public class WeatherActivity extends AppCompatActivity {
     private ImageView bingPicImg;
     private String mWeatherId;
     private String locationW;
+    private ImageView WeatherToday;
+
+    private int Rpic;
 
     public String getLocationW() {
         return locationW;
@@ -105,6 +109,8 @@ public class WeatherActivity extends AppCompatActivity {
         swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navButton = (Button) findViewById(R.id.nav_button);
+        WeatherToday=(ImageView)findViewById(R.id.weather_today) ;
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String weatherString = prefs.getString("weather", null);
         if (weatherString != null) {
@@ -232,10 +238,52 @@ public class WeatherActivity extends AppCompatActivity {
         String degree = weather.now.temperature + "℃";
         String weatherInfo = weather.now.more.info;
         titleCity.setText(cityName);
-        titleUpdateTime.setText("最后更新时间:"+updateTime);
+        titleUpdateTime.setText("最后更新时间:" + updateTime);
         degreeText.setText(degree);
         weatherInfoText.setText(weatherInfo);
         forecastLayout.removeAllViews();
+
+        //WeatherActivity当前大天气图标
+        if (weather.now.more.info.equals("晴")) {
+            WeatherToday.setImageDrawable(getResources().getDrawable(R.drawable.ic_sun));
+            Rpic=R.drawable.ic_sun;
+        } else if (weather.now.more.info.equals("多云") || weather.now.more.info.equals("晴间多云")) {
+            WeatherToday.setImageDrawable(getResources().getDrawable(R.drawable.ic_sun_cloud));
+            Rpic=R.drawable.ic_sun_cloud;
+        } else if (weather.now.more.info.equals("阴")) {
+            WeatherToday.setImageDrawable(getResources().getDrawable(R.drawable.ic_cloud));
+            Rpic=R.drawable.ic_cloud;
+        } else if (weather.now.more.info.equals("小雨")) {
+            WeatherToday.setImageDrawable(getResources().getDrawable(R.drawable.ic_small_rain));
+            Rpic=R.drawable.ic_small_rain;
+        } else if (weather.now.more.info.equals("中雨")) {
+            WeatherToday.setImageDrawable(getResources().getDrawable(R.drawable.ic_mid_rain));
+            Rpic=R.drawable.ic_mid_rain;
+        } else if (weather.now.more.info.equals("大雨")) {
+            WeatherToday.setImageDrawable(getResources().getDrawable(R.drawable.ic_big_rain));
+            Rpic=R.drawable.ic_big_rain;
+        } else if (weather.now.more.info.equals("暴雨")) {
+            WeatherToday.setImageDrawable(getResources().getDrawable(R.drawable.ic_max_rain));
+            Rpic=R.drawable.ic_max_rain;
+        } else if (weather.now.more.info.equals("小雪") || weather.now.more.info.equals("阵雪")) {
+            WeatherToday.setImageDrawable(getResources().getDrawable(R.drawable.ic_small_snow));
+            Rpic=R.drawable.ic_small_snow;
+        } else if (weather.now.more.info.equals("中雪")) {
+            WeatherToday.setImageDrawable(getResources().getDrawable(R.drawable.ic_mid_snow));
+            Rpic=R.drawable.ic_mid_snow;
+        } else if (weather.now.more.info.equals("大雪")) {
+            WeatherToday.setImageDrawable(getResources().getDrawable(R.drawable.ic_big_snow));
+            Rpic=R.drawable.ic_big_snow;
+        } else if (weather.now.more.info.equals("暴雪")) {
+            WeatherToday.setImageDrawable(getResources().getDrawable(R.drawable.ic_max_snow));
+            Rpic=R.drawable.ic_max_snow;
+        } else if (weather.now.more.info.equals("雨夹雪")) {
+            WeatherToday.setImageDrawable(getResources().getDrawable(R.drawable.ic_rain_snow));
+            Rpic=R.drawable.ic_rain_snow;
+        } else {
+            WeatherToday.setImageDrawable(getResources().getDrawable(R.drawable.ic_null));
+            Rpic=R.drawable.ic_null;
+        }
 
         for (Forecast forecast : weather.forecastList) {
             View view = LayoutInflater.from(this).inflate(R.layout.forecast_item, forecastLayout,
@@ -248,32 +296,47 @@ public class WeatherActivity extends AppCompatActivity {
             dateText.setText(forecast.date);
             infoText.setText(forecast.more.info);
 
+
+            //WeatherActivity预报中的小天气图标
             if (forecast.more.info.equals("晴")) {
                 weathericon.setImageDrawable(getResources().getDrawable(R.drawable.ic_sun));
-            } else if (forecast.more.info.equals("多云")|| forecast.more.info.equals("晴间多云")) {
+
+            } else if (forecast.more.info.equals("多云") || forecast.more.info.equals("晴间多云")) {
                 weathericon.setImageDrawable(getResources().getDrawable(R.drawable.ic_sun_cloud));
+
             } else if (forecast.more.info.equals("阴")) {
                 weathericon.setImageDrawable(getResources().getDrawable(R.drawable.ic_cloud));
+
             } else if (forecast.more.info.equals("小雨")) {
                 weathericon.setImageDrawable(getResources().getDrawable(R.drawable.ic_small_rain));
+
             } else if (forecast.more.info.equals("中雨")) {
                 weathericon.setImageDrawable(getResources().getDrawable(R.drawable.ic_mid_rain));
+
             } else if (forecast.more.info.equals("大雨")) {
                 weathericon.setImageDrawable(getResources().getDrawable(R.drawable.ic_big_rain));
+
             } else if (forecast.more.info.equals("暴雨")) {
                 weathericon.setImageDrawable(getResources().getDrawable(R.drawable.ic_max_rain));
+
             } else if (forecast.more.info.equals("小雪") || forecast.more.info.equals("阵雪")) {
                 weathericon.setImageDrawable(getResources().getDrawable(R.drawable.ic_small_snow));
+
             } else if (forecast.more.info.equals("中雪")) {
                 weathericon.setImageDrawable(getResources().getDrawable(R.drawable.ic_mid_snow));
+
             } else if (forecast.more.info.equals("大雪")) {
                 weathericon.setImageDrawable(getResources().getDrawable(R.drawable.ic_big_snow));
+
             } else if (forecast.more.info.equals("暴雪")) {
                 weathericon.setImageDrawable(getResources().getDrawable(R.drawable.ic_max_snow));
+
             } else if (forecast.more.info.equals("雨夹雪")) {
                 weathericon.setImageDrawable(getResources().getDrawable(R.drawable.ic_rain_snow));
+
             } else {
                 weathericon.setImageDrawable(getResources().getDrawable(R.drawable.ic_null));
+
             }
             dateText.setText(forecast.date);
             infoText.setText(forecast.more.info);
@@ -288,6 +351,7 @@ public class WeatherActivity extends AppCompatActivity {
         String comfort = "舒适度：" + weather.suggestion.comfort.info;
         String carWash = "洗车指数：" + weather.suggestion.carWash.info;
         String sport = "运行建议：" + weather.suggestion.sport.info;
+        Infor(Rpic,cityName,degree,weatherInfo,comfort,carWash,sport);
         comfortText.setText(comfort);
         carWashText.setText(carWash);
         sportText.setText(sport);
@@ -295,6 +359,11 @@ public class WeatherActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AutoUpdateService.class);
         startService(intent);
 
+    }
+
+
+    private void Infor(int Rpic,String cityName,String degree,String weatherInfo,String comfort,String carWash,
+    String sport){
         Intent intentinfor = new Intent(this, WeatherActivity.class);
         PendingIntent pi = PendingIntent.getActivity(this, 0, intentinfor, 0);
         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -306,7 +375,8 @@ public class WeatherActivity extends AppCompatActivity {
                         "\n" + sport))
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.mipmap.ic_my_small_launcher)
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_my_launcher))
+               // .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_my_launcher))
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(),Rpic))
                 .setContentIntent(pi)
                 .setAutoCancel(true)
                 .build();

@@ -140,6 +140,7 @@ public class ChooseAreaFragment extends Fragment {
                 MainActivity activity = (MainActivity) getActivity();
                 location = activity.getLocation();
                 findCounty(location);
+                weatherId=findWeatherId();
                 Log.e("tag", location + "//" + weatherId);
                 Intent intent = new Intent(MyApplication.getContext(), WeatherActivity.class);
                 intent.putExtra("weather_id", weatherId);

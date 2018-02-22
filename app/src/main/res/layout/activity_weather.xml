@@ -36,13 +36,19 @@
 
                     <include layout="@layout/title" />
 
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
                     <include layout="@layout/now" />
 
-                    <include layout="@layout/forecast" />
-
                     <include layout="@layout/aqi" />
+                    </LinearLayout>
 
                     <include layout="@layout/suggestion" />
+
+                    <include layout="@layout/forecast" />
 
                 </LinearLayout>
 
